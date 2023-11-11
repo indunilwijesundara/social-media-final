@@ -119,5 +119,19 @@ router.put("/:id/unfollow", async (req, res) => {
     res.status(403).json("you cant unfollow yourself");
   }
 });
+router.get("/guiders", async (req, res) => {
+  try {
+    const guiders = await User.find({ isGuider: true });
 
+    // Exclude sensitive information from the response
+    const sanitizedGuiders = guiders.map((guider) => {
+      const { password, updatedAt, ...other } = guider._doc;
+      return other;
+    });
+
+    res.status(200).json(sanitizedGuiders);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 module.exports = router;

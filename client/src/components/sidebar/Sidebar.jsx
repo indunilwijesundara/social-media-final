@@ -13,7 +13,27 @@ import EventIcon from '@mui/icons-material/Event';
 import SchoolIcon from '@mui/icons-material/School';
 import HotelIcon from '@mui/icons-material/Hotel';
 import { Link } from "react-router-dom";
+import Guiders from "../guiders/Guiders";
+import { useEffect, useState } from "react";
+import axios from "axios";
 export default function Sidebar() {
+  const [guiders, setGuiders] = useState([]);
+
+  useEffect(() => {
+    const fetchGuiders = async () => {
+      try {
+        // Replace the URL with the actual endpoint to fetch guiders
+        const response = await axios.get("http://localhost:8800/api/users/guiders");
+        
+        setGuiders(response.data);
+      } catch (error) {
+        console.error("Error fetching guiders:", error.message);
+      }
+    };
+
+    fetchGuiders();
+  }, []);
+  console.log(guiders)
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -66,8 +86,10 @@ export default function Sidebar() {
         <button className="sidebarButton">Show More</button>
         <hr className="sidebarHr" />
         <ul className="sidebarFriendList">
-          {Users.map((u) => (
-            <CloseFriend key={u.id} user={u} />
+          <span>Contact Your Guider</span>
+        
+          {guiders.map((u) => (
+            <Guiders key={u.id} user={u} />
           ))}
         </ul>
       </div>

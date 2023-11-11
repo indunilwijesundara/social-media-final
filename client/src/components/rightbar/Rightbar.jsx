@@ -19,7 +19,22 @@ export default function Rightbar({ user }) {
 //   setFollowed(currentUser.followings.includes(user?.id));
 // },[currentUser,user.id]);
 
+const [hotels, setHotels] = useState([]);
 
+useEffect(() => {
+  const fetchHotels = async () => {
+    try {
+      const response = await axios.get("http://localhost:8800/api/hotels/getHotels");
+      setHotels(response.data);
+    } catch (error) {
+      console.error("Error fetching hotels:", error);
+    }
+  };
+
+  fetchHotels();
+}, []);
+
+console.log(hotels)
   useEffect(() => {
     const getFriends = async () => {
       try {
@@ -91,79 +106,25 @@ export default function Rightbar({ user }) {
         </div>
 
         <div className="rightbarExperience">
-          <div className="Experience">
-            <Link to={"/hotel/id"} style={{ textDecoration: "none" }}>
-              <img
-                className="ExperienceImg"
-                src={PF + "/places/1.jpg"}
-                alt=""
-              />
-              <span
-                className="ExperienceText"
-                style={{ textDecoration: "none" }}
-              >
-                Flagship Amsterdam Open Boat Canal Cruise - Local live guide
-                with bar on board
-              </span>
+        {hotels.map((hotel) => (
+          <div className="Experience" key={hotel._id}>
+            <Link to={`/hotels/${hotel._id}`} style={{ textDecoration: "none" }}>
+              <img className="ExperienceImg"src={hotel.photos[0]} alt="" />
+              <span className="ExperienceText">{hotel.name}</span>
+              {/* Include other hotel information */}
               <div className="Rating">
-                <Star style={{ color: "yellow" }} />{" "}
-                <Star style={{ color: "yellow" }} /> <Star /> <Star />
-                <span>534</span>
+                {/* Display hotel rating */}
+                <Star style={{ color: "yellow" }} /> <Star style={{ color: "yellow" }} /> <Star /> <Star />
+                <span>{hotel.rating}</span>
               </div>
-              <span className="IntersetText">from $20 per adult</span>
+              <span className="IntersetText">{`from $${hotel.cheapestPrice} per adult`}</span>
             </Link>
           </div>
+        ))}
 
-          <div className="Experience">
-            <img className="ExperienceImg" src={PF + "/places/2.jpg"} alt="" />
-            <span className="ExperienceText">
-              Dubai: Red Dunes ATV, Sandsurf, Camels, Stargazing & 5* BBQ at Al
-              Khayma Camp™️
-            </span>
-            <div className="Rating">
-              <Star style={{ color: "yellow" }} />{" "}
-              <Star style={{ color: "yellow" }} /> <Star /> <Star />
-              <span>534</span>
-            </div>
-            <span className="IntersetText">from $20 per adult</span>
-          </div>
-          <div className="Experience">
-            <img className="ExperienceImg" src={PF + "/places/3.jpg"} alt="" />
-            <span className="ExperienceText">
-              Flagship Amsterdam Open Boat Canal Cruise - Local live guide with
-              bar on board
-            </span>
-            <div className="Rating">
-              <Star style={{ color: "yellow" }} />{" "}
-              <Star style={{ color: "yellow" }} /> <Star /> <Star />
-              <span>534</span>
-            </div>
-            <span className="IntersetText">from $20 per adult</span>
-          </div>
-          <div className="Experience">
-            <img className="ExperienceImg" src={PF + "/places/4.jpg"} alt="" />
-            <span className="ExperienceText">
-              Tour of North Shore & Sightseeing
-            </span>
-            <div className="Rating">
-              <Star style={{ color: "yellow" }} />{" "}
-              <Star style={{ color: "yellow" }} /> <Star /> <Star />
-              <span>534</span>
-            </div>
-            <span className="IntersetText">from $20 per adult</span>
-          </div>
-          <div className="Experience">
-            <img className="ExperienceImg" src={PF + "/places/1.jpg"} alt="" />
-            <span className="ExperienceText">
-              Aruba Natural Pool and Indian Cave Jeep Safari
-            </span>
-            <div className="Rating">
-              <Star style={{ color: "yellow" }} />{" "}
-              <Star style={{ color: "yellow" }} /> <Star /> <Star />
-              <span>534</span>
-            </div>
-            <span className="IntersetText">from $20 per adult</span>
-          </div>
+         
+      
+  
         </div>
 
         <h4 className="rightbarTitle">Online Travel Guiders</h4>
